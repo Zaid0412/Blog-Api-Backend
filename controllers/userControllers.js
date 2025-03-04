@@ -11,6 +11,9 @@ module.exports.userControllers = {
     });
   },
   create: async (req, res, next) => {
+    res.json({
+      message: `Creating User!`,
+    });
     try {
       const { username, email, password } = req.body; // Getting all vals from req.body
       const hashedPassword = await bcrypt.hash(password, 10); // Hashing password
