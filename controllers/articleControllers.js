@@ -39,6 +39,7 @@ module.exports.articleControllers = {
     }
   },
   create: async (req, res, next) => {
+    console.log(req.body);
     try {
       const { title, content, isPublished, userId } = req.body;
       const article = await prisma.article.create({
