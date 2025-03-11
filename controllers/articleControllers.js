@@ -38,6 +38,18 @@ module.exports.articleControllers = {
       next(error);
     }
   },
+  getByAuthorId: async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const articles = await prisma.article.findMany({
+        where: { userId: id },
+        include: { user: true },
+      });
+      res.json({ articles });
+    } catch (error) {
+      next(error);
+    }
+  },
   create: async (req, res, next) => {
     console.log(req.body);
     try {
@@ -93,13 +105,27 @@ module.exports.articleControllers = {
   search: async (req, res, next) => {
     try {
       const { searchWord } = req.query;
+      const { id } = req.params;
+
       const articles = await prisma.article.findMany({
         where: {
           title: { contains: searchWord, mode: "insensitive" },
         },
-        include: { comments: true }, // Should return an array, not null
+        include: { comments: true, user: true },
       });
-      res.json({
+
+      if (id != "null") {
+        console.log(`------ ID Provided: ${id} -------`);
+        const filteredArticles = articles.filter(
+          (article) => article.userId == id,
+        );
+        return res.json({
+          articles: filteredArticles,
+        });
+      }
+
+      console.log("------ No ID Provided -------");
+      return res.json({
         articles,
       });
     } catch (error) {
