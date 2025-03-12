@@ -92,16 +92,35 @@ module.exports.articleControllers = {
   delete: async (req, res, next) => {
     try {
       const { id } = req.params;
-      const article = await prisma.article.delete({
+      const userId = req.user.id; // Assuming req.user is set by verify middleware
+
+      // Fetch the article to check ownership
+      const article = await prisma.article.findUnique({
         where: { id },
       });
-      res.json({
-        message: `Article Deleted: ${article}`,
+
+      if (!article) {
+        return res.status(404).json({ error: "Article not found" });
+      }
+
+      // **Authorization Check**: Ensure the user owns the article
+      if (article.userId !== userId) {
+        return res
+          .status(403)
+          .json({ error: "You are not authorized to delete this article" });
+      }
+
+      // Proceed with deletion
+      await prisma.article.delete({
+        where: { id },
       });
+
+      res.json({ message: `Article Deleted: ${id}` });
     } catch (error) {
       next(error);
     }
   },
+
   search: async (req, res, next) => {
     try {
       const { searchWord } = req.query;
