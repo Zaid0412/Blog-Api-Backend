@@ -21,7 +21,7 @@ router.post("/users/logout", verify, userControllers.logout);
 router.get("/articles/all", articleControllers.all);
 router.get("/articles/latest", articleControllers.latest);
 router.get("/articles/search", articleControllers.search);
-router.get("/articles/author/:id/search", articleControllers.search);
+router.get("/articles/author/:id/search", articleControllers.searchByAuthor);
 router.get("/articles/author/:id", articleControllers.getByAuthorId);
 router.post("/articles", verify, articleControllers.create); // C
 router.get("/articles/:id", articleControllers.getById); // R
