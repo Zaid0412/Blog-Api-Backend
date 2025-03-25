@@ -121,7 +121,7 @@ module.exports.articleControllers = {
     }
   },
 
-  search: async (req, res, next) => {
+  searchByAuthor: async (req, res, next) => {
     try {
       const { searchWord } = req.query;
       const { id } = req.params;
@@ -133,17 +133,27 @@ module.exports.articleControllers = {
         include: { comments: true, user: true },
       });
 
-      if (id != "null") {
-        console.log(`------ ID Provided: ${id} -------`);
-        const filteredArticles = articles.filter(
-          (article) => article.userId == id,
-        );
-        return res.json({
-          articles: filteredArticles,
-        });
-      }
+      const filteredArticles = articles.filter(
+        (article) => article.userId == id,
+      );
+      return res.json({
+        articles: filteredArticles,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  search: async (req, res, next) => {
+    try {
+      const { searchWord } = req.query;
 
-      console.log("------ No ID Provided -------");
+      const articles = await prisma.article.findMany({
+        where: {
+          title: { contains: searchWord, mode: "insensitive" },
+        },
+        include: { comments: true, user: true },
+      });
+
       return res.json({
         articles,
       });
