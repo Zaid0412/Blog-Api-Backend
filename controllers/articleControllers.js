@@ -104,11 +104,11 @@ module.exports.articleControllers = {
       }
 
       // **Authorization Check**: Ensure the user owns the article
-      if (article.userId !== userId) {
-        return res
-          .status(403)
-          .json({ error: "You are not authorized to delete this article" });
-      }
+      // if (article.userId !== userId) {
+      //   return res
+      //     .status(403)
+      //     .json({ error: "You are not authorized to delete this article" });
+      // }
 
       // Proceed with deletion
       await prisma.article.delete({
