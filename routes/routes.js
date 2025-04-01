@@ -15,7 +15,7 @@ router.get("/users", userControllers.all);
 router.post("/users", registerValidation, userControllers.create);
 router.post("/users/login", userControllers.login);
 router.post("/users/refresh", userControllers.refresh);
-router.post("/users/logout", verify, userControllers.logout);
+router.post("/users/logout", userControllers.logout);
 
 // Article Routes
 router.get("/articles/all", articleControllers.all);
@@ -23,10 +23,10 @@ router.get("/articles/latest", articleControllers.latest);
 router.get("/articles/search", articleControllers.search);
 router.get("/articles/author/:id/search", articleControllers.searchByAuthor);
 router.get("/articles/author/:id", articleControllers.getByAuthorId);
-router.post("/articles", verify, articleControllers.create); // C
+router.post("/articles", articleControllers.create); // C
 router.get("/articles/:id", articleControllers.getById); // R
-router.put("/articles/:id", verify, articleControllers.update); // U
-router.delete("/articles/:id", verify, articleControllers.delete); // D
+router.put("/articles/:id", articleControllers.update); // U
+router.delete("/articles/:id", articleControllers.delete); // D
 
 // Comment Routes
 router.get("/articles/:id/comments", commentControllers.getByArticleId);
